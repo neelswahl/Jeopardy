@@ -15,20 +15,37 @@
       flex-direction: column;
       align-items: center;
     }
+    .header-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
     h1 {
       color: #ffcc00;
       text-shadow: 3px 3px #000;
-      margin-bottom: 20px;
+      margin: 0 0 10px 0;
       text-transform: uppercase;
     }
-    
+    .admin-btn {
+      background-color: #28a745;
+      color: white;
+      border: 2px solid white;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .admin-btn:hover { background-color: #218838; }
+
     /* Board Styling */
     .board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 10px;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
       background-color: #000;
       padding: 10px;
       border-radius: 8px;
@@ -39,7 +56,7 @@
       border: 2px solid #000;
       padding: 15px 5px;
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.95rem;
       text-transform: uppercase;
       display: flex;
       align-items: center;
@@ -78,16 +95,13 @@
       flex-wrap: wrap;
       gap: 10px;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
       margin-top: 25px;
       background: #000;
       padding: 15px;
       border-radius: 8px;
     }
-    .team-score {
-      text-align: center;
-      min-width: 120px;
-    }
+    .team-score { text-align: center; min-width: 120px; }
     .team-name { color: #ffcc00; font-size: 1.1rem; }
     .score-val { font-size: 1.8rem; margin: 5px 0; }
     .score-btn {
@@ -112,6 +126,7 @@
       display: inline-block;
       margin-bottom: 15px;
       border: 2px solid #ffcc00;
+      transition: color 0.3s, border-color 0.3s;
     }
 
     /* Modal Popup */
@@ -123,17 +138,20 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      z-index: 100;
     }
     .modal-content {
       background-color: #060ce9;
       border: 4px solid #ffcc00;
       border-radius: 12px;
       padding: 30px;
-      max-width: 600px;
+      max-width: 700px;
       width: 90%;
       text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .clue-text { font-size: 1.8rem; margin-bottom: 20px; line-height: 1.4; }
+    .clue-text { font-size: 1.8rem; margin-bottom: 20px; line-height: 1.4; white-space: pre-line; }
     .answer-text { font-size: 1.8rem; color: #ffcc00; margin: 20px 0; display: none; }
     .action-btn {
       background-color: #ffcc00;
@@ -144,54 +162,51 @@
       cursor: pointer;
       border-radius: 6px;
       margin: 10px 5px 0 5px;
+      font-weight: bold;
     }
     .action-btn:hover { background-color: #e6b800; }
+
+    /* Instructions & Textarea */
+    .instructions {
+      font-family: sans-serif;
+      font-size: 0.95rem;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px;
+      border-radius: 6px;
+      border-left: 4px solid #ffcc00;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      padding: 10px;
+      border-radius: 6px;
+      border: 2px solid #ffcc00;
+      margin: 10px 0;
+      font-size: 0.95rem;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Vocabulary Jeopardy</h1>
+  <div class="header-container">
+    <h1>Vocabulary Jeopardy</h1>
+    <button class="admin-btn" onclick="openUploadModal()">⚙️ Enter Custom Word List</button>
+  </div>
 
   <div class="board" id="jeopardy-board"></div>
 
   <!-- Scoreboard for 6 Teams -->
   <div class="scoreboard">
-    <div class="team-score">
-      <div class="team-name">Team 1</div>
-      <div class="score-val" id="score-1">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(1, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(1, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 2</div>
-      <div class="score-val" id="score-2">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(2, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(2, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 3</div>
-      <div class="score-val" id="score-3">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(3, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(3, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 4</div>
-      <div class="score-val" id="score-4">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(4, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(4, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 5</div>
-      <div class="score-val" id="score-5">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(5, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(5, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 6</div>
-      <div class="score-val" id="score-6">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(6, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(6, -100)">-$100</button>
-    </div>
+    <div class="team-score"><div class="team-name">Team 1</div><div class="score-val" id="score-1">$0</div><button class="score-btn btn-add" onclick="changeScore(1, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(1, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 2</div><div class="score-val" id="score-2">$0</div><button class="score-btn btn-add" onclick="changeScore(2, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(2, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 3</div><div class="score-val" id="score-3">$0</div><button class="score-btn btn-add" onclick="changeScore(3, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(3, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 4</div><div class="score-val" id="score-4">$0</div><button class="score-btn btn-add" onclick="changeScore(4, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(4, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 5</div><div class="score-val" id="score-5">$0</div><button class="score-btn btn-add" onclick="changeScore(5, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(5, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 6</div><div class="score-val" id="score-6">$0</div><button class="score-btn btn-add" onclick="changeScore(6, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(6, -100)">-$100</button></div>
   </div>
 
   <!-- Question Popup Modal -->
@@ -205,89 +220,180 @@
     </div>
   </div>
 
+  <!-- Word List Modal -->
+  <div class="modal" id="upload-modal">
+    <div class="modal-content">
+      <h2 style="color:#ffcc00; margin-top:0;">Upload Custom Vocabulary Words</h2>
+      
+      <div class="instructions">
+        <strong>Instructions:</strong> Enter up to 5 words (1 per line). Format each line by filling in the <strong>word, definition, part of speech, synonyms, fill-in-the-blank, other forms</strong> — all on the same line with spaces or commas in between.<br><br>
+        <strong>Example (using commas):</strong><br>
+        <code>exhale, to breathe air out, verb, expire / breathe out, Take a deep breath and then ____., exhalation / exhaled</code>
+      </div>
+
+      <textarea id="word-list-input" placeholder="exhale, to breathe air out from lungs, verb, expire / breathe out, Take a deep breath and then ____., exhalation / exhaled&#10;promptly, done quickly or without delay, adverb, immediately / quickly, Please reply ____ to the email., promptness / prompt&#10;congestion, overcrowding or heavy traffic, noun, blockage / clogging, Heavy traffic caused road ____., congest / congested&#10;fundamental, essential or core truth, adjective, basic / foundational, Honesty is a ____ principle., fundamentally / fundamentals&#10;stabilize, to make firm or steady, verb, steady / secure, Doctors worked to ____ the patient., stability / stabilizer"></textarea>
+
+      <div style="margin-top: 15px;">
+        <button class="action-btn" id="generate-btn" onclick="generateFromWords()">⚡ Generate Game</button>
+        <button class="action-btn" style="background:#dc3545; color:white;" onclick="resetToDefault()">Reset Default</button>
+        <button class="action-btn" style="background:#6c757d; color:white;" onclick="closeUploadModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Game Data: 5 Categories
-    const gameData = [
+    // Default Game Data (5 categories)
+    const defaultGameData = [
       {
-        category: "Clear Definitions",
+        category: "Definition",
         clues: [
           { value: 100, question: "To breathe air out from your lungs.", answer: "Exhale" },
-          { value: 200, question: "Done quickly, immediately, or without any delay.", answer: "Promptly" },
+          { value: 200, question: "Done quickly, immediately, or without delay.", answer: "Promptly" },
           { value: 300, question: "Overcrowding, clogging, or a heavy traffic jam.", answer: "Congestion" },
           { value: 400, question: "A basic, essential truth, rule, or core principle.", answer: "Fundamental" },
-          { value: 500, question: "Having the effect of keeping something steady, firm, or balanced.", answer: "Stabilizing" }
+          { value: 500, question: "To make firm, steady, or balanced.", answer: "Stabilize" }
         ]
       },
       {
-        category: "Synonyms & Antonyms",
-        clues: [
-          { value: 100, question: "A synonym for 'purify', 'wash', or 'sanitize'.", answer: "Cleanse" },
-          { value: 200, question: "A synonym for 'sad', 'downcast', or 'disappointed'.", answer: "Dejected" },
-          { value: 300, question: "An antonym for 'delightful', 'wonderful', or 'pleasant'.", answer: "Dreadful" },
-          { value: 400, question: "A synonym for a 'careless mistake' or 'foolish error'.", answer: "Blunder" },
-          { value: 500, question: "An antonym for 'accept', 'approve', or 'welcome'.", answer: "Reject" }
-        ]
-      },
-      {
-        category: "Fill in the Blank",
-        clues: [
-          { value: 100, question: "Set your goals high and work hard every day to _____ them.", answer: "Accomplish" },
-          { value: 200, question: "Her name is Mary Jane Smith, so the _____ on her bag read M.J.S.", answer: "Initials" },
-          { value: 300, question: "Turn the key in the car's _____ to start the engine.", answer: "Ignition" },
-          { value: 400, question: "Loud cell phone noises will easily _____ students during an exam.", answer: "Distract" },
-          { value: 500, question: "The chief _____ officer made the final business decisions for the corporation.", answer: "Executive" }
-        ]
-      },
-      {
-        category: "Action & Gear",
-        clues: [
-          { value: 100, question: "A repeated, steady pattern of movement or sound in music.", answer: "Rhythm" },
-          { value: 200, question: "Not including; with the exclusion of something.", answer: "Except" },
-          { value: 300, question: "To supply or furnish someone with necessary tools or gear.", answer: "Equip" },
-          { value: 400, question: "Something that is secret, unexplained, or hard to solve.", answer: "Mystery" },
-          { value: 500, question: "A set of straps used to secure a climber or hitch an animal.", answer: "Harness" }
-        ]
-      },
-      {
-        category: "Parts of Speech",
+        category: "Part of Speech",
         clues: [
           { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "Verb" },
-          { value: 200, question: "What part of speech is the word 'DEJECTED'?", answer: "Adjective" },
+          { value: 200, question: "What part of speech is the word 'PROMPTLY'?", answer: "Adverb" },
           { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "Noun" },
-          { value: 400, question: "What part of speech is the word 'STABILIZING'?", answer: "Adjective" },
-          { value: 500, question: "What part of speech is the word 'EXECUTIVE'?", answer: "Noun" }
+          { value: 400, question: "What part of speech is the word 'FUNDAMENTAL'?", answer: "Adjective" },
+          { value: 500, question: "What part of speech is the word 'STABILIZE'?", answer: "Verb" }
+        ]
+      },
+      {
+        category: "Synonyms",
+        clues: [
+          { value: 100, question: "Synonym(s): expire, breathe out", answer: "Exhale" },
+          { value: 200, question: "Synonym(s): immediately, quickly", answer: "Promptly" },
+          { value: 300, question: "Synonym(s): blockage, clogging", answer: "Congestion" },
+          { value: 400, question: "Synonym(s): basic, foundational", answer: "Fundamental" },
+          { value: 500, question: "Synonym(s): steady, secure", answer: "Stabilize" }
+        ]
+      },
+      {
+        category: "Fill-in-the-Blank",
+        clues: [
+          { value: 100, question: "Fill in the blank:\n\"Take a deep breath and then ____ through your nose.\"", answer: "Exhale" },
+          { value: 200, question: "Fill in the blank:\n\"Please reply ____ to the invitation so we can confirm.\"", answer: "Promptly" },
+          { value: 300, question: "Fill in the blank:\n\"Heavy morning traffic caused severe road ____.\"", answer: "Congestion" },
+          { value: 400, question: "Fill in the blank:\n\"Honesty is a ____ principle of good character.\"", answer: "Fundamental" },
+          { value: 500, question: "Fill in the blank:\n\"The medical team worked hard to ____ the patient.\"", answer: "Stabilize" }
+        ]
+      },
+      {
+        category: "Other Forms",
+        clues: [
+          { value: 100, question: "What are other word forms for 'EXHALE'?", answer: "exhalation, exhaled, exhaling" },
+          { value: 200, question: "What are other word forms for 'PROMPTLY'?", answer: "prompt, promptness" },
+          { value: 300, question: "What are other word forms for 'CONGESTION'?", answer: "congest, congested" },
+          { value: 400, question: "What are other word forms for 'FUNDAMENTAL'?", answer: "fundamentally, fundamentals" },
+          { value: 500, question: "What are other word forms for 'STABILIZE'?", answer: "stability, stabilizer, stabilized" }
         ]
       }
     ];
 
+    let gameData = [];
     let teamScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     let timerInterval;
     let timeLeft = 30;
+    let audioCtx = null;
 
-    // Build the Jeopardy Board
-    const board = document.getElementById("jeopardy-board");
-
-    // Add Headers
-    gameData.forEach(cat => {
-      const header = document.createElement("div");
-      header.className = "category-header";
-      header.textContent = cat.category;
-      board.appendChild(header);
-    });
-
-    // Add Tiles
-    for (let r = 0; r < 5; r++) {
-      gameData.forEach((cat, catIdx) => {
-        const clue = cat.clues[r];
-        const tile = document.createElement("div");
-        tile.className = "tile";
-        tile.textContent = `$${clue.value}`;
-        tile.onclick = () => openClue(tile, clue);
-        board.appendChild(tile);
-      });
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
     }
 
-    // Modal Control & Timer Functions
+    // Normal Tick-Tock Sound
+    function playTickSound(isTock) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(isTock ? 600 : 800, ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.05);
+      } catch (e) { console.error(e); }
+    }
+
+    // Louder Alarming Sound for last 5 seconds
+    function playAlarmSound() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(950, ctx.currentTime);
+        osc.frequency.setValueAtTime(1250, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.2);
+      } catch (e) { console.error(e); }
+    }
+
+    // End Buzzer
+    function playBuzzerSound() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(130, ctx.currentTime);
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.7);
+      } catch (e) { console.error(e); }
+    }
+
+    function initGameData() {
+      const savedData = localStorage.getItem("jeopardyCustomData");
+      if (savedData) {
+        try { gameData = JSON.parse(savedData); } 
+        catch (e) { gameData = JSON.parse(JSON.stringify(defaultGameData)); }
+      } else {
+        gameData = JSON.parse(JSON.stringify(defaultGameData));
+      }
+      renderBoard();
+    }
+
+    function renderBoard() {
+      const board = document.getElementById("jeopardy-board");
+      board.innerHTML = "";
+
+      gameData.forEach(cat => {
+        const header = document.createElement("div");
+        header.className = "category-header";
+        header.textContent = cat.category;
+        board.appendChild(header);
+      });
+
+      for (let r = 0; r < 5; r++) {
+        gameData.forEach(cat => {
+          const clue = cat.clues[r] || { value: (r + 1) * 100, question: "N/A", answer: "N/A" };
+          const tile = document.createElement("div");
+          tile.className = "tile";
+          tile.textContent = `$${clue.value}`;
+          tile.onclick = () => openClue(tile, clue);
+          board.appendChild(tile);
+        });
+      }
+    }
+
     function openClue(tileElement, clue) {
       if (tileElement.classList.contains("used")) return;
 
@@ -321,18 +427,22 @@
       display.style.borderColor = "#ffcc00";
       display.textContent = `⏱️ Time Remaining: ${timeLeft}s`;
 
+      playTickSound(false);
+
       timerInterval = setInterval(() => {
         timeLeft--;
         display.textContent = `⏱️ Time Remaining: ${timeLeft}s`;
 
-        if (timeLeft <= 5) {
+        if (timeLeft > 5) {
+          playTickSound(timeLeft % 2 === 0);
+        } else if (timeLeft > 0) {
           display.style.color = "#ff3333";
           display.style.borderColor = "#ff3333";
-        }
-
-        if (timeLeft <= 0) {
+          playAlarmSound();
+        } else {
           clearInterval(timerInterval);
           display.textContent = "⏰ TIME'S UP!";
+          playBuzzerSound();
         }
       }, 1000);
     }
@@ -341,11 +451,92 @@
       clearInterval(timerInterval);
     }
 
-    // Score Functions
     function changeScore(team, amount) {
       teamScores[team] += amount;
       document.getElementById(`score-${team}`).textContent = `$${teamScores[team]}`;
     }
+
+    function openUploadModal() {
+      document.getElementById("upload-modal").style.display = "flex";
+    }
+
+    function closeUploadModal() {
+      document.getElementById("upload-modal").style.display = "none";
+    }
+
+    // Parse input line supporting comma-separated or space-separated items
+    function parseCustomLine(line) {
+      let parts = [];
+      if (line.includes(',')) {
+        parts = line.split(',').map(p => p.trim());
+      } else {
+        parts = line.split(/\s+/).map(p => p.trim());
+      }
+
+      if (parts.length < 1 || !parts[0]) return null;
+
+      const word = parts[0] || "N/A";
+      const definition = parts[1] || "No definition provided.";
+      const pos = parts[2] || "Noun";
+      const synonyms = parts[3] || "N/A";
+      const fillIn = parts[4] || `Fill in the blank with the target word: ____.`;
+      const otherForms = parts[5] || "N/A";
+
+      return { word, definition, pos, synonyms, fillIn, otherForms };
+    }
+
+    function generateFromWords() {
+      const rawInput = document.getElementById("word-list-input").value.trim();
+      if (!rawInput) {
+        alert("Please enter your word list!");
+        return;
+      }
+
+      const lines = rawInput.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      const parsedItems = lines.map(parseCustomLine).filter(item => item !== null);
+
+      if (parsedItems.length === 0) {
+        alert("Could not parse any valid lines. Please check the instructions.");
+        return;
+      }
+
+      // Build 5 Categories
+      const newGameData = [
+        { category: "Definition", clues: [] },
+        { category: "Part of Speech", clues: [] },
+        { category: "Synonyms", clues: [] },
+        { category: "Fill-in-the-Blank", clues: [] },
+        { category: "Other Forms", clues: [] }
+      ];
+
+      for (let r = 0; r < 5; r++) {
+        const item = parsedItems[r % parsedItems.length];
+        const val = (r + 1) * 100;
+
+        newGameData[0].clues.push({ value: val, question: item.definition, answer: item.word });
+        newGameData[1].clues.push({ value: val, question: `What part of speech is the word '${item.word.toUpperCase()}'?`, answer: item.pos });
+        newGameData[2].clues.push({ value: val, question: `Synonym(s): ${item.synonyms}`, answer: item.word });
+        newGameData[3].clues.push({ value: val, question: item.fillIn, answer: item.word });
+        newGameData[4].clues.push({ value: val, question: `What are other word forms for '${item.word.toUpperCase()}'?`, answer: item.otherForms });
+      }
+
+      gameData = newGameData;
+      localStorage.setItem("jeopardyCustomData", JSON.stringify(gameData));
+
+      renderBoard();
+      closeUploadModal();
+      alert("Successfully loaded your custom vocabulary board!");
+    }
+
+    function resetToDefault() {
+      localStorage.removeItem("jeopardyCustomData");
+      gameData = JSON.parse(JSON.stringify(defaultGameData));
+      renderBoard();
+      closeUploadModal();
+      alert("Game reset to default vocabulary!");
+    }
+
+    initGameData();
   </script>
 </body>
 </html>
