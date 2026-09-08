@@ -169,7 +169,7 @@
     }
     .action-btn:hover { background-color: #e6b800; }
 
-    /* Upload Form Styles */
+    /* Form Styles */
     textarea {
       width: 100%;
       height: 160px;
@@ -253,10 +253,10 @@
     <div class="modal-content">
       <h2 style="color:#ffcc00; margin-top:0;">Paste Vocabulary Words</h2>
       <p style="font-family: sans-serif; font-size: 0.95rem; text-align: left;">
-        Enter <b>20 to 25 words</b> (separated by commas or new lines). The game will automatically look up definitions online and build the Jeopardy board!
+        Enter <b>5 words</b> (for 1 word per row) or <b>up to 25 words</b>. The game will create clues for: <i>Clear Definitions, Parts of Speech, Fill in the Blank, Synonyms & Antonyms, and Sentence Context</i>.
       </p>
 
-      <textarea id="word-list-input" placeholder="congestion, dejected, equip, executive, exhale, fundamental, harness, stabilizing, accomplish, blunder, cleanse, distract, dreadful, except, ignition, initials, mystery, promptly, reject, rhythm"></textarea>
+      <textarea id="word-list-input" placeholder="exhale, dejected, congestion, fundamental, stabilizing"></textarea>
 
       <div class="status-msg" id="status-msg">🔍 Fetching definitions online... Please wait!</div>
 
@@ -282,43 +282,43 @@
         ]
       },
       {
-        category: "Synonyms & Antonyms",
+        category: "Parts of Speech",
         clues: [
-          { value: 100, question: "A synonym for 'purify', 'wash', or 'sanitize'.", answer: "Cleanse" },
-          { value: 200, question: "A synonym for 'sad', 'downcast', or 'disappointed'.", answer: "Dejected" },
-          { value: 300, question: "An antonym for 'delightful', 'wonderful', or 'pleasant'.", answer: "Dreadful" },
-          { value: 400, question: "A synonym for a 'careless mistake' or 'foolish error'.", answer: "Blunder" },
-          { value: 500, question: "An antonym for 'accept', 'approve', or 'welcome'.", answer: "Reject" }
+          { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "VERB" },
+          { value: 200, question: "What part of speech is the word 'PROMPTLY'?", answer: "ADVERB" },
+          { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "NOUN" },
+          { value: 400, question: "What part of speech is the word 'FUNDAMENTAL'?", answer: "ADJECTIVE" },
+          { value: 500, question: "What part of speech is the word 'STABILIZING'?", answer: "ADJECTIVE" }
         ]
       },
       {
         category: "Fill in the Blank",
         clues: [
-          { value: 100, question: "Set your goals high and work hard every day to _____ them.", answer: "Accomplish" },
-          { value: 200, question: "Her name is Mary Jane Smith, so the _____ on her bag read M.J.S.", answer: "Initials" },
-          { value: 300, question: "Turn the key in the car's _____ to start the engine.", answer: "Ignition" },
-          { value: 400, question: "Loud cell phone noises will easily _____ students during an exam.", answer: "Distract" },
-          { value: 500, question: "The chief _____ officer made the final business decisions for the corporation.", answer: "Executive" }
+          { value: 100, question: "Fill in the blank: \"Take a deep breath and then slowly _____ the air.\"", answer: "Exhale" },
+          { value: 200, question: "Fill in the blank: \"Please reply _____ to the invitation so we can finalize headcount.\"", answer: "Promptly" },
+          { value: 300, question: "Fill in the blank: \"Heavy morning traffic caused severe road _____.\"", answer: "Congestion" },
+          { value: 400, question: "Fill in the blank: \"Reading is a _____ skill for all academic success.\"", answer: "Fundamental" },
+          { value: 500, question: "Fill in the blank: \"The medicine provided a _____ effect on his fever.\"", answer: "Stabilizing" }
         ]
       },
       {
-        category: "Action & Gear",
+        category: "Synonyms & Antonyms",
         clues: [
-          { value: 100, question: "A repeated, steady pattern of movement or sound in music.", answer: "Rhythm" },
-          { value: 200, question: "Not including; with the exclusion of something.", answer: "Except" },
-          { value: 300, question: "To supply or furnish someone with necessary tools or gear.", answer: "Equip" },
-          { value: 400, question: "Something that is secret, unexplained, or hard to solve.", answer: "Mystery" },
-          { value: 500, question: "A set of straps used to secure a climber or hitch an animal.", answer: "Harness" }
+          { value: 100, question: "A synonym for 'breathe out' or 'expire'.", answer: "Exhale" },
+          { value: 200, question: "A synonym for 'immediately' or 'quickly'.", answer: "Promptly" },
+          { value: 300, question: "A synonym for 'blockage' or 'overcrowding'.", answer: "Congestion" },
+          { value: 400, question: "An antonym for 'unimportant', 'minor', or 'secondary'.", answer: "Fundamental" },
+          { value: 500, question: "A synonym for 'steadying', 'balancing', or 'securing'.", answer: "Stabilizing" }
         ]
       },
       {
-        category: "Parts of Speech",
+        category: "Sentence Context",
         clues: [
-          { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "Verb" },
-          { value: 200, question: "What part of speech is the word 'DEJECTED'?", answer: "Adjective" },
-          { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "Noun" },
-          { value: 400, question: "What part of speech is the word 'STABILIZING'?", answer: "Adjective" },
-          { value: 500, question: "What part of speech is the word 'EXECUTIVE'?", answer: "Noun" }
+          { value: 100, question: "Which target word fits best: \"Yoga practice focuses heavily on how to inhale and _____ properly.\"", answer: "Exhale" },
+          { value: 200, question: "Which target word fits best: \"The firefighters arrived _____ at the scene within three minutes.\"", answer: "Promptly" },
+          { value: 300, question: "Which target word fits best: \"Nasal sprays are used to relieve chest and sinus _____.\"", answer: "Congestion" },
+          { value: 400, question: "Which target word fits best: \"Freedom of speech is a _____ right in democratic societies.\"", answer: "Fundamental" },
+          { value: 500, question: "Which target word fits best: \"Financially, the new investment had a _____ impact on the business.\"", answer: "Stabilizing" }
         ]
       }
     ];
@@ -341,66 +341,50 @@
       return audioCtx;
     }
 
-    // Gentle Tick-Tock Sound
     function playTickSound(isTock) {
       try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
         osc.type = 'sine';
         osc.frequency.setValueAtTime(isTock ? 600 : 800, ctx.currentTime);
-
         gain.gain.setValueAtTime(0.12, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
-
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start();
         osc.stop(ctx.currentTime + 0.05);
       } catch (e) { console.error(e); }
     }
 
-    // Loud Alarming Sound for Last 5 Seconds
     function playAlarmSound() {
       try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
         osc.type = 'sawtooth';
-        // Quick high double tone
         osc.frequency.setValueAtTime(900, ctx.currentTime);
         osc.frequency.setValueAtTime(1200, ctx.currentTime + 0.08);
-
-        gain.gain.setValueAtTime(0.35, ctx.currentTime); // Louder volume
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
-
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start();
         osc.stop(ctx.currentTime + 0.22);
       } catch (e) { console.error(e); }
     }
 
-    // Time's Up Buzzer
     function playBuzzerSound() {
       try {
         const ctx = getAudioContext();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(130, ctx.currentTime);
-
         gain.gain.setValueAtTime(0.5, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
-
         osc.connect(gain);
         gain.connect(ctx.destination);
-
         osc.start();
         osc.stop(ctx.currentTime + 0.7);
       } catch (e) { console.error(e); }
@@ -424,8 +408,7 @@
       const board = document.getElementById("jeopardy-board");
       board.innerHTML = "";
       
-      const numCategories = gameData.length;
-      board.style.gridTemplateColumns = `repeat(${numCategories}, 1fr)`;
+      board.style.gridTemplateColumns = `repeat(5, 1fr)`;
 
       gameData.forEach(cat => {
         const header = document.createElement("div");
@@ -516,6 +499,85 @@
       document.getElementById("upload-modal").style.display = "none";
     }
 
+    // Helper: Smart Rule-Based Fallback for Part of Speech
+    function inferPartOfSpeech(word) {
+      const w = word.toLowerCase();
+      if (w.endsWith('tion') || w.endsWith('sion') || w.endsWith('ment') || w.endsWith('ness') || w.endsWith('ity') || w.endsWith('ance') || w.endsWith('ence')) return 'noun';
+      if (w.endsWith('ing') || w.endsWith('ed') || w.endsWith('ize') || w.endsWith('ate') || w.endsWith('fy')) return 'verb';
+      if (w.endsWith('ful') || w.endsWith('ous') || w.endsWith('ive') || w.endsWith('able') || w.endsWith('ible') || w.endsWith('ic') || w.endsWith('less')) return 'adjective';
+      if (w.endsWith('ly')) return 'adverb';
+      return 'noun';
+    }
+
+    // Helper: Fetch word data from API or create smart fallback clues
+    async function fetchWordDetails(rawWord) {
+      const word = rawWord.trim().toLowerCase();
+      const capWord = word.charAt(0).toUpperCase() + word.slice(1);
+      
+      let pos = inferPartOfSpeech(word);
+      let def = "";
+      let example = "";
+      let synonyms = [];
+
+      try {
+        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+        if (response.ok) {
+          const data = await response.json();
+          const meanings = data[0]?.meanings || [];
+          if (meanings.length > 0) {
+            pos = meanings[0].partOfSpeech || pos;
+            for (let m of meanings) {
+              for (let d of (m.definitions || [])) {
+                if (!def && d.definition) def = d.definition;
+                if (!example && d.example) example = d.example;
+                if ((m.synonyms || []).length > 0) synonyms = synonyms.concat(m.synonyms);
+                if ((d.synonyms || []).length > 0) synonyms = synonyms.concat(d.synonyms);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("API offline or word lookup fallback used for:", word);
+      }
+
+      // Filter synonyms
+      synonyms = Array.from(new Set(synonyms)).filter(s => s.toLowerCase() !== word);
+
+      // Mask word in string helper
+      const mask = (text) => text.replace(new RegExp(`\\b${word}(s|ed|ing|es)?\\b`, 'gi'), '_____');
+
+      if (!def) {
+        def = `the essential meaning or core concept represented by the word '${capWord}'`;
+      }
+
+      // Build 5 distinct Category Clues
+      const defClue = `(${pos}) ${mask(def)}`;
+      
+      const posClue = `What part of speech is the word '${capWord.toUpperCase()}'?`;
+      
+      let fillClue = example 
+        ? `Fill in the blank: "${mask(example)}"` 
+        : `Fill in the blank: "It is essential to understand how to _____ this key vocabulary word correctly."`;
+
+      let synClue = synonyms.length > 0 
+        ? `A synonym or related term for: '${synonyms.slice(0, 3).join("', '")}'.` 
+        : `A vocabulary word related in meaning to: "${mask(def).substring(0, 60)}..."`;
+
+      let contextClue = example 
+        ? `Which target word fits best: "${mask(example)}"` 
+        : `Which target word best fits this context: "(${pos}) ${mask(def)}"?`;
+
+      return {
+        word: capWord,
+        pos: pos.toUpperCase(),
+        defClue,
+        posClue,
+        fillClue,
+        synClue,
+        contextClue
+      };
+    }
+
     async function generateFromWords() {
       const rawInput = document.getElementById("word-list-input").value.trim();
       if (!rawInput) {
@@ -525,8 +587,8 @@
 
       const words = Array.from(new Set(rawInput.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length > 0)));
 
-      if (words.length < 5) {
-        alert("Please enter at least 5 words to generate a game.");
+      if (words.length < 1) {
+        alert("Please enter at least 1 word.");
         return;
       }
 
@@ -535,78 +597,58 @@
       statusMsg.style.display = "block";
       genBtn.disabled = true;
 
-      const fetchedClues = [];
-
+      const wordDetails = [];
       for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        statusMsg.textContent = `🔍 Looking up definition for "${word}" (${i + 1}/${words.length})...`;
-
-        try {
-          const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-          if (response.ok) {
-            const data = await response.json();
-            const meaning = data[0]?.meanings[0];
-            let rawDef = meaning?.definitions[0]?.definition || `A vocabulary word meaning '${word}'.`;
-            const partOfSpeech = meaning?.partOfSpeech ? `(${meaning.partOfSpeech}) ` : '';
-
-            const maskedDef = rawDef.replace(new RegExp(word, 'gi'), '_____');
-
-            fetchedClues.push({
-              word: word,
-              question: `${partOfSpeech}${maskedDef}`,
-              partOfSpeech: meaning?.partOfSpeech || 'word'
-            });
-          } else {
-            fetchedClues.push({
-              word: word,
-              question: `Definition clue for the target word: _____`,
-              partOfSpeech: 'word'
-            });
-          }
-        } catch (e) {
-          fetchedClues.push({
-            word: word,
-            question: `Definition clue for the target word: _____`,
-            partOfSpeech: 'word'
-          });
-        }
+        statusMsg.textContent = `🔍 Looking up definitions for "${words[i]}" (${i + 1}/${words.length})...`;
+        const details = await fetchWordDetails(words[i]);
+        wordDetails.push(details);
       }
 
-      const newGameData = [];
-      const totalCategories = 5;
+      // Fixed 5 Categories
+      const newGameData = [
+        { category: "Clear Definitions", clues: [] },
+        { category: "Parts of Speech", clues: [] },
+        { category: "Fill in the Blank", clues: [] },
+        { category: "Synonyms & Antonyms", clues: [] },
+        { category: "Sentence Context", clues: [] }
+      ];
 
-      for (let c = 0; c < totalCategories; c++) {
-        const catClues = [];
+      if (wordDetails.length === 5) {
+        // If 5 words entered: 1 word per row ($100 to $500) across all categories
         for (let r = 0; r < 5; r++) {
-          const index = (c * 5) + r;
-          if (index < fetchedClues.length) {
-            catClues.push({
-              value: (r + 1) * 100,
-              question: fetchedClues[index].question,
-              answer: fetchedClues[index].word
-            });
-          } else {
-            catClues.push({
-              value: (r + 1) * 100,
-              question: `Bonus Review: What is word #${(r+1)}?`,
-              answer: fetchedClues[r % fetchedClues.length]?.word || "N/A"
-            });
+          const item = wordDetails[r];
+          const val = (r + 1) * 100;
+          newGameData[0].clues.push({ value: val, question: item.defClue, answer: item.word });
+          newGameData[1].clues.push({ value: val, question: item.posClue, answer: item.pos });
+          newGameData[2].clues.push({ value: val, question: item.fillClue, answer: item.word });
+          newGameData[3].clues.push({ value: val, question: item.synClue, answer: item.word });
+          newGameData[4].clues.push({ value: val, question: item.contextClue, answer: item.word });
+        }
+      } else {
+        // Distribute words across board slots
+        for (let c = 0; c < 5; c++) {
+          for (let r = 0; r < 5; r++) {
+            const idx = (c * 5) + r;
+            const item = wordDetails[idx % wordDetails.length];
+            const val = (r + 1) * 100;
+
+            if (c === 0) newGameData[0].clues.push({ value: val, question: item.defClue, answer: item.word });
+            else if (c === 1) newGameData[1].clues.push({ value: val, question: item.posClue, answer: item.pos });
+            else if (c === 2) newGameData[2].clues.push({ value: val, question: item.fillClue, answer: item.word });
+            else if (c === 3) newGameData[3].clues.push({ value: val, question: item.synClue, answer: item.word });
+            else if (c === 4) newGameData[4].clues.push({ value: val, question: item.contextClue, answer: item.word });
           }
         }
-        newGameData.push({
-          category: `Vocab Group ${c + 1}`,
-          clues: catClues
-        });
       }
 
       gameData = newGameData;
       localStorage.setItem("jeopardyCustomData", JSON.stringify(gameData));
-      
+
       statusMsg.style.display = "none";
       genBtn.disabled = false;
       renderBoard();
       closeUploadModal();
-      alert(`Success! Generated 5 Jeopardy categories for ${words.length} words.`);
+      alert(`Success! Game generated with fixed categories for your word set.`);
     }
 
     function resetToDefault() {
