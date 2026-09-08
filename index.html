@@ -101,10 +101,7 @@
       padding: 15px;
       border-radius: 8px;
     }
-    .team-score {
-      text-align: center;
-      min-width: 120px;
-    }
+    .team-score { text-align: center; min-width: 120px; }
     .team-name { color: #ffcc00; font-size: 1.1rem; }
     .score-val { font-size: 1.8rem; margin: 5px 0; }
     .score-btn {
@@ -199,42 +196,12 @@
 
   <!-- Scoreboard for 6 Teams -->
   <div class="scoreboard">
-    <div class="team-score">
-      <div class="team-name">Team 1</div>
-      <div class="score-val" id="score-1">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(1, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(1, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 2</div>
-      <div class="score-val" id="score-2">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(2, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(2, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 3</div>
-      <div class="score-val" id="score-3">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(3, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(3, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 4</div>
-      <div class="score-val" id="score-4">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(4, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(4, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 5</div>
-      <div class="score-val" id="score-5">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(5, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(5, -100)">-$100</button>
-    </div>
-    <div class="team-score">
-      <div class="team-name">Team 6</div>
-      <div class="score-val" id="score-6">$0</div>
-      <button class="score-btn btn-add" onclick="changeScore(6, 100)">+$100</button>
-      <button class="score-btn btn-sub" onclick="changeScore(6, -100)">-$100</button>
-    </div>
+    <div class="team-score"><div class="team-name">Team 1</div><div class="score-val" id="score-1">$0</div><button class="score-btn btn-add" onclick="changeScore(1, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(1, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 2</div><div class="score-val" id="score-2">$0</div><button class="score-btn btn-add" onclick="changeScore(2, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(2, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 3</div><div class="score-val" id="score-3">$0</div><button class="score-btn btn-add" onclick="changeScore(3, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(3, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 4</div><div class="score-val" id="score-4">$0</div><button class="score-btn btn-add" onclick="changeScore(4, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(4, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 5</div><div class="score-val" id="score-5">$0</div><button class="score-btn btn-add" onclick="changeScore(5, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(5, -100)">-$100</button></div>
+    <div class="team-score"><div class="team-name">Team 6</div><div class="score-val" id="score-6">$0</div><button class="score-btn btn-add" onclick="changeScore(6, 100)">+$100</button><button class="score-btn btn-sub" onclick="changeScore(6, -100)">-$100</button></div>
   </div>
 
   <!-- Question Popup Modal -->
@@ -253,10 +220,10 @@
     <div class="modal-content">
       <h2 style="color:#ffcc00; margin-top:0;">Paste Vocabulary Words</h2>
       <p style="font-family: sans-serif; font-size: 0.95rem; text-align: left;">
-        Enter <b>5 words</b> (for 1 word per row) or <b>up to 25 words</b>. The game will create clues for: <i>Clear Definitions, Parts of Speech, Fill in the Blank, Synonyms & Antonyms, and Sentence Context</i>.
+        Enter <b>5 words</b> (1 per row) or <b>up to 25 words</b>. The generator will create accurate clues tailored to each word's part of speech.
       </p>
 
-      <textarea id="word-list-input" placeholder="exhale, dejected, congestion, fundamental, stabilizing"></textarea>
+      <textarea id="word-list-input" placeholder="analysis, exhale, congestion, fundamental, stabilizing"></textarea>
 
       <div class="status-msg" id="status-msg">🔍 Fetching definitions online... Please wait!</div>
 
@@ -277,7 +244,7 @@
           { value: 100, question: "To breathe air out from your lungs.", answer: "Exhale" },
           { value: 200, question: "Done quickly, immediately, or without any delay.", answer: "Promptly" },
           { value: 300, question: "Overcrowding, clogging, or a heavy traffic jam.", answer: "Congestion" },
-          { value: 400, question: "A basic, essential truth, rule, or core principle.", answer: "Fundamental" },
+          { value: 400, question: "A detailed examination or study of something's structure.", answer: "Analysis" },
           { value: 500, question: "Having the effect of keeping something steady, firm, or balanced.", answer: "Stabilizing" }
         ]
       },
@@ -287,7 +254,7 @@
           { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "VERB" },
           { value: 200, question: "What part of speech is the word 'PROMPTLY'?", answer: "ADVERB" },
           { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "NOUN" },
-          { value: 400, question: "What part of speech is the word 'FUNDAMENTAL'?", answer: "ADJECTIVE" },
+          { value: 400, question: "What part of speech is the word 'ANALYSIS'?", answer: "NOUN" },
           { value: 500, question: "What part of speech is the word 'STABILIZING'?", answer: "ADJECTIVE" }
         ]
       },
@@ -297,7 +264,7 @@
           { value: 100, question: "Fill in the blank: \"Take a deep breath and then slowly _____ the air.\"", answer: "Exhale" },
           { value: 200, question: "Fill in the blank: \"Please reply _____ to the invitation so we can finalize headcount.\"", answer: "Promptly" },
           { value: 300, question: "Fill in the blank: \"Heavy morning traffic caused severe road _____.\"", answer: "Congestion" },
-          { value: 400, question: "Fill in the blank: \"Reading is a _____ skill for all academic success.\"", answer: "Fundamental" },
+          { value: 400, question: "Fill in the blank: \"The lab technician conducted a careful _____ of the sample.\"", answer: "Analysis" },
           { value: 500, question: "Fill in the blank: \"The medicine provided a _____ effect on his fever.\"", answer: "Stabilizing" }
         ]
       },
@@ -307,7 +274,7 @@
           { value: 100, question: "A synonym for 'breathe out' or 'expire'.", answer: "Exhale" },
           { value: 200, question: "A synonym for 'immediately' or 'quickly'.", answer: "Promptly" },
           { value: 300, question: "A synonym for 'blockage' or 'overcrowding'.", answer: "Congestion" },
-          { value: 400, question: "An antonym for 'unimportant', 'minor', or 'secondary'.", answer: "Fundamental" },
+          { value: 400, question: "A synonym for 'examination', 'investigation', or 'inspection'.", answer: "Analysis" },
           { value: 500, question: "A synonym for 'steadying', 'balancing', or 'securing'.", answer: "Stabilizing" }
         ]
       },
@@ -317,7 +284,7 @@
           { value: 100, question: "Which target word fits best: \"Yoga practice focuses heavily on how to inhale and _____ properly.\"", answer: "Exhale" },
           { value: 200, question: "Which target word fits best: \"The firefighters arrived _____ at the scene within three minutes.\"", answer: "Promptly" },
           { value: 300, question: "Which target word fits best: \"Nasal sprays are used to relieve chest and sinus _____.\"", answer: "Congestion" },
-          { value: 400, question: "Which target word fits best: \"Freedom of speech is a _____ right in democratic societies.\"", answer: "Fundamental" },
+          { value: 400, question: "Which target word fits best: \"After months of research, she presented her final _____ to the board.\"", answer: "Analysis" },
           { value: 500, question: "Which target word fits best: \"Financially, the new investment had a _____ impact on the business.\"", answer: "Stabilizing" }
         ]
       }
@@ -328,16 +295,11 @@
     let timerInterval;
     let timeLeft = 30;
 
-    // Web Audio Synthesizer Sound Effects
     let audioCtx = null;
 
     function getAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
 
@@ -393,11 +355,8 @@
     function initGameData() {
       const savedData = localStorage.getItem("jeopardyCustomData");
       if (savedData) {
-        try {
-          gameData = JSON.parse(savedData);
-        } catch (e) {
-          gameData = JSON.parse(JSON.stringify(defaultGameData));
-        }
+        try { gameData = JSON.parse(savedData); } 
+        catch (e) { gameData = JSON.parse(JSON.stringify(defaultGameData)); }
       } else {
         gameData = JSON.parse(JSON.stringify(defaultGameData));
       }
@@ -407,7 +366,6 @@
     function renderBoard() {
       const board = document.getElementById("jeopardy-board");
       board.innerHTML = "";
-      
       board.style.gridTemplateColumns = `repeat(5, 1fr)`;
 
       gameData.forEach(cat => {
@@ -502,14 +460,38 @@
     // Helper: Smart Rule-Based Fallback for Part of Speech
     function inferPartOfSpeech(word) {
       const w = word.toLowerCase();
-      if (w.endsWith('tion') || w.endsWith('sion') || w.endsWith('ment') || w.endsWith('ness') || w.endsWith('ity') || w.endsWith('ance') || w.endsWith('ence')) return 'noun';
+      if (w.endsWith('tion') || w.endsWith('sion') || w.endsWith('sis') || w.endsWith('ment') || w.endsWith('ness') || w.endsWith('ity') || w.endsWith('ance') || w.endsWith('ence')) return 'noun';
       if (w.endsWith('ing') || w.endsWith('ed') || w.endsWith('ize') || w.endsWith('ate') || w.endsWith('fy')) return 'verb';
-      if (w.endsWith('ful') || w.endsWith('ous') || w.endsWith('ive') || w.endsWith('able') || w.endsWith('ible') || w.endsWith('ic') || w.endsWith('less')) return 'adjective';
+      if (w.endsWith('ful') || w.endsWith('ous') || w.endsWith('ive') || w.endsWith('able') || w.endsWith('ible') || w.endsWith('ic') || w.endsWith('less') || w.endsWith('al')) return 'adjective';
       if (w.endsWith('ly')) return 'adverb';
       return 'noun';
     }
 
-    // Helper: Fetch word data from API or create smart fallback clues
+    // Helper: Mask target word in sentences
+    function maskWord(text, word) {
+      if (!text) return "";
+      const regex = new RegExp(`\\b${word}(s|ed|ing|es|ses)?\\b`, 'gi');
+      return text.replace(regex, '_____');
+    }
+
+    // Helper: Generate POS-matched sentence templates when API has no example
+    function buildPOSSentence(word, pos, def) {
+      const p = pos.toLowerCase();
+      const cleanDef = def.replace(/^(a|an|to)\s+/i, '');
+
+      if (p === 'noun') {
+        return `The project required a detailed _____ [Hint: ${cleanDef}].`;
+      } else if (p === 'verb') {
+        return `It is important to _____ [Hint: ${cleanDef}] the details carefully.`;
+      } else if (p === 'adjective') {
+        return `They provided a very _____ [Hint: ${cleanDef}] explanation.`;
+      } else if (p === 'adverb') {
+        return `The assignment was completed _____ [Hint: ${cleanDef}].`;
+      }
+      return `Fill in the blank: A word meaning '${cleanDef}' is _____.`;
+    }
+
+    // Fetch word data from API or create smart fallback clues
     async function fetchWordDetails(rawWord) {
       const word = rawWord.trim().toLowerCase();
       const capWord = word.charAt(0).toUpperCase() + word.slice(1);
@@ -537,35 +519,29 @@
           }
         }
       } catch (e) {
-        console.warn("API offline or word lookup fallback used for:", word);
+        console.warn("API fallback used for:", word);
       }
 
-      // Filter synonyms
       synonyms = Array.from(new Set(synonyms)).filter(s => s.toLowerCase() !== word);
 
-      // Mask word in string helper
-      const mask = (text) => text.replace(new RegExp(`\\b${word}(s|ed|ing|es)?\\b`, 'gi'), '_____');
-
       if (!def) {
-        def = `the essential meaning or core concept represented by the word '${capWord}'`;
+        def = `detailed concept or term representing '${capWord}'`;
       }
 
       // Build 5 distinct Category Clues
-      const defClue = `(${pos}) ${mask(def)}`;
+      const defClue = `(${pos.toUpperCase()}) ${maskWord(def, word)}`;
       
       const posClue = `What part of speech is the word '${capWord.toUpperCase()}'?`;
       
-      let fillClue = example 
-        ? `Fill in the blank: "${mask(example)}"` 
-        : `Fill in the blank: "It is essential to understand how to _____ this key vocabulary word correctly."`;
+      const sentenceText = example ? maskWord(example, word) : buildPOSSentence(capWord, pos, def);
+      
+      const fillClue = `Fill in the blank: "${sentenceText}"`;
 
       let synClue = synonyms.length > 0 
-        ? `A synonym or related term for: '${synonyms.slice(0, 3).join("', '")}'.` 
-        : `A vocabulary word related in meaning to: "${mask(def).substring(0, 60)}..."`;
+        ? `A synonym for this word is: '${synonyms.slice(0, 2).join("', '")}'.` 
+        : `A word meaning '${def}' that belongs in this vocabulary set.`;
 
-      let contextClue = example 
-        ? `Which target word fits best: "${mask(example)}"` 
-        : `Which target word best fits this context: "(${pos}) ${mask(def)}"?`;
+      const contextClue = `Which target word fits best in this sentence:\n"${sentenceText}"`;
 
       return {
         word: capWord,
@@ -604,7 +580,7 @@
         wordDetails.push(details);
       }
 
-      // Fixed 5 Categories
+      // Fixed 5 Jeopardy Categories
       const newGameData = [
         { category: "Clear Definitions", clues: [] },
         { category: "Parts of Speech", clues: [] },
@@ -625,7 +601,7 @@
           newGameData[4].clues.push({ value: val, question: item.contextClue, answer: item.word });
         }
       } else {
-        // Distribute words across board slots
+        // Distribute words cleanly across the 25 board slots
         for (let c = 0; c < 5; c++) {
           for (let r = 0; r < 5; r++) {
             const idx = (c * 5) + r;
@@ -648,7 +624,7 @@
       genBtn.disabled = false;
       renderBoard();
       closeUploadModal();
-      alert(`Success! Game generated with fixed categories for your word set.`);
+      alert(`Success! Created customized clues for your vocabulary words.`);
     }
 
     function resetToDefault() {
