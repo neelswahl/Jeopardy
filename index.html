@@ -42,7 +42,7 @@
     /* Board Styling */
     .board {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
       width: 100%;
       max-width: 1000px;
@@ -169,7 +169,7 @@
     /* Form Styles */
     textarea {
       width: 100%;
-      height: 170px;
+      height: 180px;
       font-family: monospace;
       padding: 10px;
       border-radius: 6px;
@@ -177,19 +177,13 @@
       margin: 10px 0;
       font-size: 1rem;
     }
-    .status-msg {
-      color: #ffcc00;
-      font-weight: bold;
-      margin-top: 10px;
-      display: none;
-    }
   </style>
 </head>
 <body>
 
   <div class="header-container">
     <h1>Vocabulary Jeopardy</h1>
-    <button class="admin-btn" onclick="openUploadModal()">⚙️ Auto-Generate Game from Word List</button>
+    <button class="admin-btn" onclick="openUploadModal()">⚙️ Enter Custom Word List</button>
   </div>
 
   <div class="board" id="jeopardy-board"></div>
@@ -220,14 +214,10 @@
     <div class="modal-content">
       <h2 style="color:#ffcc00; margin-top:0;">Paste Vocabulary Words</h2>
       <p style="font-family: sans-serif; font-size: 0.95rem; text-align: left; line-height: 1.4;">
-        Enter <b>5 words</b> (1 per row) or up to 25 words.<br>
-        <b>Tip:</b> Include the part of speech in parentheses so it's 100% accurate!<br>
-        <i>Format example:</i> <code>rhyme (noun), delete (verb), succeed (verb), lonesome (adj), bracelet (noun)</code>
+        Enter 5 words (1 per row) or up to 25 words. Leave a space and add the part of speech. The generator will create accurate clues tailored to each word. (Ex: funny adj)
       </p>
 
-      <textarea id="word-list-input" placeholder="rhyme (noun)&#10;delete (verb)&#10;succeed (verb)&#10;lonesome (adj)&#10;bracelet (noun)"></textarea>
-
-      <div class="status-msg" id="status-msg">🔍 Fetching definitions online... Please wait!</div>
+      <textarea id="word-list-input" placeholder="funny adj causing laughter or amusement&#10;delete verb to erase or remove text&#10;succeed verb to achieve a desired goal&#10;lonesome adj feeling solitary or isolated&#10;bracelet noun an ornament worn around the wrist"></textarea>
 
       <div style="margin-top: 15px;">
         <button class="action-btn" id="generate-btn" onclick="generateFromWords()">⚡ Generate Game</button>
@@ -238,31 +228,30 @@
   </div>
 
   <script>
-    // Built-in verified offline definitions & example sentences for guaranteed accuracy
+    // Local offline dictionary database for defaults & fallback synonyms
     const localDict = {
-      "rhyme": { pos: "NOUN", def: "A word that has the same end sound as another word.", example: "Nursery _____s help young children learn reading sounds.", syn: ["verse", "harmony"] },
-      "delete": { pos: "VERB", def: "To remove, erase, or strike out written or stored text.", example: "Press the backspace key to _____ the incorrect letter.", syn: ["erase", "remove", "cancel"] },
-      "succeed": { pos: "VERB", def: "To achieve a desired aim, result, or goal.", example: "With hard work and practice, you will _____ in school.", syn: ["flourish", "triumph", "win"] },
-      "lonesome": { pos: "ADJECTIVE", def: "Solitary, lonely, or feeling isolated from others.", example: "The lone wolf gave a _____ howl into the night sky.", syn: ["lonely", "solitary", "isolated"] },
-      "bracelet": { pos: "NOUN", def: "An ornamental band, hoop, or chain worn around the wrist.", example: "She fastened the golden _____ onto her wrist.", syn: ["bangle", "wristband", "band"] },
-      "analysis": { pos: "NOUN", def: "A detailed examination or study of something's structure.", example: "The scientist completed a thorough _____ of the lab data.", syn: ["examination", "investigation", "study"] },
-      "exhale": { pos: "VERB", def: "To breathe air out from your lungs.", example: "Take a deep breath and then slowly _____ the air.", syn: ["breathe out", "expire"] },
-      "promptly": { pos: "ADVERB", def: "Done quickly, immediately, or without any delay.", example: "The firefighters arrived _____ at the scene within three minutes.", syn: ["immediately", "quickly"] },
-      "congestion": { pos: "NOUN", def: "Overcrowding, clogging, or a heavy traffic jam.", example: "Heavy morning traffic caused severe road _____.", syn: ["blockage", "overcrowding"] },
-      "fundamental": { pos: "ADJECTIVE", def: "A basic, essential truth, rule, or core principle.", example: "Reading is a _____ skill for academic success.", syn: ["essential", "basic"] },
-      "stabilizing": { pos: "ADJECTIVE", def: "Having the effect of keeping something steady, firm, or balanced.", example: "The medicine provided a _____ effect on his fever.", syn: ["steadying", "balancing"] }
+      "funny": { pos: "ADJECTIVE", def: "causing laughter or amusement; humorous", syn: ["amusing", "comical", "humorous"] },
+      "rhyme": { pos: "NOUN", def: "a word that has the same end sound as another word", syn: ["verse", "harmony"] },
+      "delete": { pos: "VERB", def: "to remove, erase, or strike out text or data", syn: ["erase", "remove", "cancel"] },
+      "succeed": { pos: "VERB", def: "to achieve a desired aim, result, or goal", syn: ["flourish", "triumph", "win"] },
+      "lonesome": { pos: "ADJECTIVE", def: "solitary, lonely, or feeling isolated from others", syn: ["lonely", "solitary", "isolated"] },
+      "bracelet": { pos: "NOUN", def: "an ornamental band or chain worn around the wrist", syn: ["bangle", "wristband", "band"] },
+      "analysis": { pos: "NOUN", def: "a detailed examination or study of something", syn: ["examination", "investigation", "study"] },
+      "exhale": { pos: "VERB", def: "to breathe air out from your lungs", syn: ["breathe out", "expire"] },
+      "promptly": { pos: "ADVERB", def: "done quickly, immediately, or without delay", syn: ["immediately", "quickly"] },
+      "congestion": { pos: "NOUN", def: "overcrowding, clogging, or a heavy traffic jam", syn: ["blockage", "overcrowding"] }
     };
 
-    // Default Board State
+    // Default Game Data
     const defaultGameData = [
       {
         category: "Clear Definitions",
         clues: [
           { value: 100, question: "(VERB) To breathe air out from your lungs.", answer: "Exhale" },
-          { value: 200, question: "(ADVERB) Done quickly, immediately, or without any delay.", answer: "Promptly" },
+          { value: 200, question: "(ADVERB) Done quickly, immediately, or without delay.", answer: "Promptly" },
           { value: 300, question: "(NOUN) Overcrowding, clogging, or a heavy traffic jam.", answer: "Congestion" },
-          { value: 400, question: "(NOUN) A detailed examination or study of something's structure.", answer: "Analysis" },
-          { value: 500, question: "(ADJECTIVE) Having the effect of keeping something steady, firm, or balanced.", answer: "Stabilizing" }
+          { value: 400, question: "(NOUN) A detailed examination or study of something.", answer: "Analysis" },
+          { value: 500, question: "(ADJECTIVE) Solitary, lonely, or feeling isolated.", answer: "Lonesome" }
         ]
       },
       {
@@ -272,37 +261,27 @@
           { value: 200, question: "What part of speech is the word 'PROMPTLY'?", answer: "ADVERB" },
           { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "NOUN" },
           { value: 400, question: "What part of speech is the word 'ANALYSIS'?", answer: "NOUN" },
-          { value: 500, question: "What part of speech is the word 'STABILIZING'?", answer: "ADJECTIVE" }
+          { value: 500, question: "What part of speech is the word 'LONESOME'?", answer: "ADJECTIVE" }
         ]
       },
       {
         category: "Fill in the Blank",
         clues: [
-          { value: 100, question: "Fill in the blank: \"Take a deep breath and then slowly _____ the air.\"", answer: "Exhale" },
-          { value: 200, question: "Fill in the blank: \"Please reply _____ to the invitation so we can finalize headcount.\"", answer: "Promptly" },
-          { value: 300, question: "Fill in the blank: \"Heavy morning traffic caused severe road _____.\"", answer: "Congestion" },
-          { value: 400, question: "Fill in the blank: \"The lab technician conducted a careful _____ of the sample.\"", answer: "Analysis" },
-          { value: 500, question: "Fill in the blank: \"The medicine provided a _____ effect on his fever.\"", answer: "Stabilizing" }
+          { value: 100, question: "Fill in the blank:\n\"Take a deep breath and then slowly _____ the air.\"", answer: "Exhale" },
+          { value: 200, question: "Fill in the blank:\n\"Please reply _____ to the invitation so we can confirm.\"", answer: "Promptly" },
+          { value: 300, question: "Fill in the blank:\n\"Heavy morning traffic caused severe road _____.\"", answer: "Congestion" },
+          { value: 400, question: "Fill in the blank:\n\"The technician conducted a careful _____ of the sample.\"", answer: "Analysis" },
+          { value: 500, question: "Fill in the blank:\n\"The lone traveler spent a _____ night in the quiet cabin.\"", answer: "Lonesome" }
         ]
       },
       {
         category: "Synonyms & Antonyms",
         clues: [
-          { value: 100, question: "A synonym for 'breathe out' or 'expire'.", answer: "Exhale" },
-          { value: 200, question: "A synonym for 'immediately' or 'quickly'.", answer: "Promptly" },
-          { value: 300, question: "A synonym for 'blockage' or 'overcrowding'.", answer: "Congestion" },
-          { value: 400, question: "A synonym for 'examination', 'investigation', or 'study'.", answer: "Analysis" },
-          { value: 500, question: "A synonym for 'steadying', 'balancing', or 'securing'.", answer: "Stabilizing" }
-        ]
-      },
-      {
-        category: "Sentence Context",
-        clues: [
-          { value: 100, question: "Which target word fits best:\n\"Yoga practice focuses heavily on how to inhale and _____ properly.\"", answer: "Exhale" },
-          { value: 200, question: "Which target word fits best:\n\"The firefighters arrived _____ at the scene within three minutes.\"", answer: "Promptly" },
-          { value: 300, question: "Which target word fits best:\n\"Nasal sprays are used to relieve chest and sinus _____.\"", answer: "Congestion" },
-          { value: 400, question: "Which target word fits best:\n\"After months of research, she presented her final _____ to the board.\"", answer: "Analysis" },
-          { value: 500, question: "Which target word fits best:\n\"Financially, the new investment had a _____ impact on the business.\"", answer: "Stabilizing" }
+          { value: 100, question: "A synonym or word meaning 'breathe out' or 'expire'.", answer: "Exhale" },
+          { value: 200, question: "A synonym or word meaning 'immediately' or 'quickly'.", answer: "Promptly" },
+          { value: 300, question: "A synonym or word meaning 'blockage' or 'overcrowding'.", answer: "Congestion" },
+          { value: 400, question: "A synonym or word meaning 'examination' or 'investigation'.", answer: "Analysis" },
+          { value: 500, question: "A synonym or word meaning 'lonely' or 'solitary'.", answer: "Lonesome" }
         ]
       }
     ];
@@ -311,7 +290,6 @@
     let teamScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
     let timerInterval;
     let timeLeft = 30;
-
     let audioCtx = null;
 
     function getAudioContext() {
@@ -383,7 +361,7 @@
     function renderBoard() {
       const board = document.getElementById("jeopardy-board");
       board.innerHTML = "";
-      board.style.gridTemplateColumns = `repeat(5, 1fr)`;
+      board.style.gridTemplateColumns = `repeat(${gameData.length}, 1fr)`;
 
       gameData.forEach(cat => {
         const header = document.createElement("div");
@@ -474,184 +452,119 @@
       document.getElementById("upload-modal").style.display = "none";
     }
 
-    // Parse user POS input (e.g. 'n', 'noun', 'v', 'verb', 'adj', 'adjective', 'adv')
+    // Normalizes POS input strings
     function normalizePOS(raw) {
-      if (!raw) return null;
-      const r = raw.trim().toLowerCase();
-      if (r.startsWith('n')) return 'NOUN';
-      if (r.startsWith('v')) return 'VERB';
-      if (r.startsWith('adj')) return 'ADJECTIVE';
-      if (r.startsWith('adv')) return 'ADVERB';
+      if (!raw) return 'NOUN';
+      const r = raw.trim().toLowerCase().replace(/[()]/g, '');
+      if (r === 'n' || r === 'noun') return 'NOUN';
+      if (r === 'v' || r === 'verb') return 'VERB';
+      if (r === 'adj' || r === 'adjective') return 'ADJECTIVE';
+      if (r === 'adv' || r === 'adverb') return 'ADVERB';
       return raw.toUpperCase();
     }
 
-    // Parse line: extracts word and optional user-specified POS e.g., "lonesome (adj)" or "delete - verb"
-    function parseInputLine(line) {
-      let word = line.trim();
-      let userPos = null;
+    // Parse input line format: "funny adj causing laughter" or "funny (adj) definition..."
+    function parseLine(line) {
+      const parts = line.trim().split(/\s+/);
+      if (parts.length === 0 || !parts[0]) return null;
 
-      const parenMatch = line.match(/^([a-zA-Z\s'-]+)\s*\(([^)]+)\)$/);
-      if (parenMatch) {
-        word = parenMatch[1].trim();
-        userPos = normalizePOS(parenMatch[2]);
-      } else {
-        const dashMatch = line.match(/^([a-zA-Z\s'-]+)\s*-\s*([a-zA-Z]+)$/);
-        if (dashMatch) {
-          word = dashMatch[1].trim();
-          userPos = normalizePOS(dashMatch[2]);
+      const word = parts[0].trim();
+      let pos = "NOUN";
+      let defParts = [];
+
+      if (parts.length > 1) {
+        const potentialPOS = parts[1].replace(/[:,\-()]/g, '');
+        if (['adj', 'adjective', 'noun', 'n', 'verb', 'v', 'adv', 'adverb'].includes(potentialPOS.toLowerCase())) {
+          pos = normalizePOS(potentialPOS);
+          defParts = parts.slice(2);
+        } else {
+          defParts = parts.slice(1);
         }
       }
-      return { word, userPos };
+
+      let customDef = defParts.join(' ').replace(/^[-:]\s*/, '').trim();
+
+      // Mask answer word inside the definition to prevent leaking
+      if (customDef) {
+        const regex = new RegExp(`\\b${word}(s|es|ed|ing|ness|ly|ment)?\\b`, 'gi');
+        customDef = customDef.replace(regex, '_____');
+      }
+
+      return { word, pos, customDef };
     }
 
-    // Rule-based fallback if POS wasn't specified by user
-    function inferPartOfSpeech(word) {
-      const w = word.toLowerCase();
-      if (w.endsWith('tion') || w.endsWith('sion') || w.endsWith('sis') || w.endsWith('ment') || w.endsWith('ness') || w.endsWith('ity') || w.endsWith('et')) return 'NOUN';
-      if (w.endsWith('ing') || w.endsWith('ed') || w.endsWith('ize') || w.endsWith('ate') || w.endsWith('fy')) return 'VERB';
-      if (w.endsWith('ful') || w.endsWith('ous') || w.endsWith('ive') || w.endsWith('able') || w.endsWith('ible') || w.endsWith('ic') || w.endsWith('less') || w.endsWith('some')) return 'ADJECTIVE';
-      if (w.endsWith('ly')) return 'ADVERB';
-      return 'NOUN';
-    }
-
-    // Strict sanitization: completely masks target word and variations from text
-    function sanitizeText(text, word) {
-      if (!text) return "";
-      const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const regex = new RegExp(`\\b${escaped}(s|es|ed|ing|ness|ly|ment)?\\b`, 'gi');
-      return text.replace(regex, '_____');
-    }
-
-    // Leak-proof sentence generator tailored to POS
-    function createPOSSentence(word, pos) {
+    // Generates grammatically correct sentences for Fill in the Blank
+    function generateFillSentence(word, pos) {
       const p = pos.toUpperCase();
-      if (p === 'NOUN') return `She noticed the beautiful _____ and pointed it out to everyone.`;
-      if (p === 'VERB') return `They worked carefully in order to _____ as planned.`;
-      if (p === 'ADJECTIVE') return `The atmosphere felt very _____ to all of us.`;
-      if (p === 'ADVERB') return `The task was completed _____ without any delay.`;
-      return `It is important to remember how to use _____ in a sentence correctly.`;
+      if (p === 'NOUN') {
+        return `She noticed the beautiful _____ and pointed it out to everyone.`;
+      } else if (p === 'VERB') {
+        return `They worked hard in order to _____ as planned.`;
+      } else if (p === 'ADJECTIVE') {
+        return `The atmosphere felt very _____ to all of us.`;
+      } else if (p === 'ADVERB') {
+        return `The assignment was completed _____ without any delay.`;
+      }
+      return `Fill in the blank with the correct word: _____.`;
     }
 
-    // Fetch details online or use clean local dictionary fallbacks
-    async function fetchWordDetails(item) {
-      const word = item.word.toLowerCase();
-      const capWord = word.charAt(0).toUpperCase() + word.slice(1);
-      
-      let pos = item.userPos || (localDict[word] ? localDict[word].pos : inferPartOfSpeech(word));
-      let def = localDict[word] ? localDict[word].def : "";
-      let example = localDict[word] ? localDict[word].example : "";
-      let synonyms = localDict[word] ? localDict[word].syn : [];
-
-      // Try fetching online dictionary
-      try {
-        const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-        if (response.ok) {
-          const data = await response.json();
-          const meanings = data[0]?.meanings || [];
-          if (meanings.length > 0) {
-            if (!item.userPos && meanings[0].partOfSpeech) {
-              pos = meanings[0].partOfSpeech.toUpperCase();
-            }
-            for (let m of meanings) {
-              for (let d of (m.definitions || [])) {
-                if (!def && d.definition) def = d.definition;
-                if (!example && d.example) example = d.example;
-                if ((m.synonyms || []).length > 0) synonyms = synonyms.concat(m.synonyms);
-                if ((d.synonyms || []).length > 0) synonyms = synonyms.concat(d.synonyms);
-              }
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Using offline dictionary for:", word);
-      }
-
-      // Filter synonyms to make sure answer isn't echoed
-      synonyms = Array.from(new Set(synonyms)).filter(s => s.toLowerCase() !== word);
-
-      // Sanitize definition & example to prevent ANY leak
-      def = sanitizeText(def, word);
-      example = sanitizeText(example, word);
-
-      if (!def) {
-        def = `A ${pos.toLowerCase()} vocabulary word from your current study unit.`;
-      }
-
-      // Clue 1: Definition
-      const defClue = `(${pos}) ${def}`;
-      
-      // Clue 2: Part of Speech
-      const posClue = `What part of speech is the word '${capWord.toUpperCase()}'?`;
-      
-      // Clue 3: Fill in Blank
-      const sentenceText = example ? example : createPOSSentence(capWord, pos);
-      const fillClue = `Fill in the blank:\n"${sentenceText}"`;
-
-      // Clue 4: Synonyms
-      let synClue = synonyms.length > 0 
-        ? `A synonym for this target word is: '${synonyms.slice(0, 2).join("', '")}'.` 
-        : `A word belonging to your list that means: "${def.substring(0, 70)}..."`;
-
-      // Clue 5: Sentence Context
-      const contextClue = `Which target word fits best in this sentence:\n"${sentenceText}"`;
-
-      return {
-        word: capWord,
-        pos: pos,
-        defClue,
-        posClue,
-        fillClue,
-        synClue,
-        contextClue
-      };
-    }
-
-    async function generateFromWords() {
+    function generateFromWords() {
       const rawInput = document.getElementById("word-list-input").value.trim();
       if (!rawInput) {
         alert("Please enter a list of words!");
         return;
       }
 
-      const lines = rawInput.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length > 0);
-      const parsedItems = [];
-      const seenWords = new Set();
+      const lines = rawInput.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      const items = [];
+      const seen = new Set();
 
       lines.forEach(line => {
-        const item = parseInputLine(line);
-        if (item.word && !seenWords.has(item.word.toLowerCase())) {
-          seenWords.add(item.word.toLowerCase());
-          parsedItems.push(item);
+        const parsed = parseLine(line);
+        if (parsed && parsed.word && !seen.has(parsed.word.toLowerCase())) {
+          seen.add(parsed.word.toLowerCase());
+          items.push(parsed);
         }
       });
 
-      if (parsedItems.length < 1) {
+      if (items.length < 1) {
         alert("Please enter at least 1 word.");
         return;
       }
 
-      const statusMsg = document.getElementById("status-msg");
-      const genBtn = document.getElementById("generate-btn");
-      statusMsg.style.display = "block";
-      genBtn.disabled = true;
+      const wordDetails = items.map(item => {
+        const wLower = item.word.toLowerCase();
+        const capWord = item.word.charAt(0).toUpperCase() + item.word.slice(1);
+        const pos = item.pos;
+        
+        // Use custom definition -> fallback to local dictionary -> fallback to generic
+        let def = item.customDef;
+        if (!def && localDict[wLower]) def = localDict[wLower].def;
+        if (!def) def = `a ${pos.toLowerCase()} matching this vocabulary concept`;
 
-      const wordDetails = [];
-      for (let i = 0; i < parsedItems.length; i++) {
-        statusMsg.textContent = `🔍 Processing "${parsedItems[i].word}" (${i + 1}/${parsedItems.length})...`;
-        const details = await fetchWordDetails(parsedItems[i]);
-        wordDetails.push(details);
-      }
+        let synText = (localDict[wLower] && localDict[wLower].syn) 
+          ? `'${localDict[wLower].syn.join("', '")}'` 
+          : `"${def}"`;
 
+        return {
+          word: capWord,
+          pos: pos,
+          defClue: `(${pos}) ${def}`,
+          posClue: `What part of speech is the word '${capWord.toUpperCase()}'?`,
+          fillClue: `Fill in the blank:\n"${generateFillSentence(capWord, pos)}"`,
+          synClue: `A synonym or word matching the definition: ${synText}.`
+        };
+      });
+
+      // 4 Jeopardy Categories
       const newGameData = [
         { category: "Clear Definitions", clues: [] },
         { category: "Parts of Speech", clues: [] },
         { category: "Fill in the Blank", clues: [] },
-        { category: "Synonyms & Antonyms", clues: [] },
-        { category: "Sentence Context", clues: [] }
+        { category: "Synonyms & Antonyms", clues: [] }
       ];
 
       if (wordDetails.length === 5) {
-        // Exactly 5 words: 1 word per row ($100 to $500)
         for (let r = 0; r < 5; r++) {
           const item = wordDetails[r];
           const val = (r + 1) * 100;
@@ -659,11 +572,9 @@
           newGameData[1].clues.push({ value: val, question: item.posClue, answer: item.pos });
           newGameData[2].clues.push({ value: val, question: item.fillClue, answer: item.word });
           newGameData[3].clues.push({ value: val, question: item.synClue, answer: item.word });
-          newGameData[4].clues.push({ value: val, question: item.contextClue, answer: item.word });
         }
       } else {
-        // Distribute across board
-        for (let c = 0; c < 5; c++) {
+        for (let c = 0; c < 4; c++) {
           for (let r = 0; r < 5; r++) {
             const idx = (c * 5) + r;
             const item = wordDetails[idx % wordDetails.length];
@@ -673,7 +584,6 @@
             else if (c === 1) newGameData[1].clues.push({ value: val, question: item.posClue, answer: item.pos });
             else if (c === 2) newGameData[2].clues.push({ value: val, question: item.fillClue, answer: item.word });
             else if (c === 3) newGameData[3].clues.push({ value: val, question: item.synClue, answer: item.word });
-            else if (c === 4) newGameData[4].clues.push({ value: val, question: item.contextClue, answer: item.word });
           }
         }
       }
@@ -681,11 +591,9 @@
       gameData = newGameData;
       localStorage.setItem("jeopardyCustomData", JSON.stringify(gameData));
 
-      statusMsg.style.display = "none";
-      genBtn.disabled = false;
       renderBoard();
       closeUploadModal();
-      alert(`Success! Generated clean, leak-free clues for your words.`);
+      alert(`Success! Generated 4-category game for your vocabulary list.`);
     }
 
     function resetToDefault() {
