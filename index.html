@@ -25,7 +25,7 @@
     /* Board Styling */
     .board {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
       width: 100%;
       max-width: 900px;
@@ -193,6 +193,7 @@
     // Game Data: Categories and Questions
     // Game Data: Categories and Questions using your 20 vocabulary words
     // Game Data: Categories and Questions using your 20 vocabulary words
+    // Game Data: 5 Categories using your 20 vocabulary words
     const gameData = [
       {
         category: "Clear Definitions",
@@ -232,6 +233,16 @@
           { value: 300, question: "To supply or furnish someone with necessary tools or gear.", answer: "Equip" },
           { value: 400, question: "Something that is secret, unexplained, or hard to solve.", answer: "Mystery" },
           { value: 500, question: "A set of straps used to secure a climber or hitch an animal.", answer: "Harness" }
+        ]
+      },
+      {
+        category: "Parts of Speech",
+        clues: [
+          { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "Verb" },
+          { value: 200, question: "What part of speech is the word 'DEJECTED'?", answer: "Adjective" },
+          { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "Noun" },
+          { value: 400, question: "What part of speech is the word 'STABILIZING'?", answer: "Adjective" },
+          { value: 500, question: "What part of speech is the word 'EXECUTIVE'?", answer: "Noun" }
         ]
       }
     ];
