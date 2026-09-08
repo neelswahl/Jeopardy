@@ -153,6 +153,30 @@
       <button class="score-btn btn-add" onclick="changeScore(2, 100)">+$100</button>
       <button class="score-btn btn-sub" onclick="changeScore(2, -100)">-$100</button>
     </div>
+    <div class="team-score">
+      <div class="team-name">Team 3</div>
+      <div class="score-val" id="score-3">$0</div>
+      <button class="score-btn btn-add" onclick="changeScore(3, 100)">+$100</button>
+      <button class="score-btn btn-sub" onclick="changeScore(3, -100)">-$100</button>
+    </div>
+    <div class="team-score">
+      <div class="team-name">Team 4</div>
+      <div class="score-val" id="score-4">$0</div>
+      <button class="score-btn btn-add" onclick="changeScore(4, 100)">+$100</button>
+      <button class="score-btn btn-sub" onclick="changeScore(4, -100)">-$100</button>
+    </div>
+    <div class="team-score">
+      <div class="team-name">Team 5</div>
+      <div class="score-val" id="score-5">$0</div>
+      <button class="score-btn btn-add" onclick="changeScore(5, 100)">+$100</button>
+      <button class="score-btn btn-sub" onclick="changeScore(5, -100)">-$100</button>
+    </div>
+    <div class="team-score">
+      <div class="team-name">Team 6</div>
+      <div class="score-val" id="score-6">$0</div>
+      <button class="score-btn btn-add" onclick="changeScore(6, 100)">+$100</button>
+      <button class="score-btn btn-sub" onclick="changeScore(6, -100)">-$100</button>
+    </div>
   </div>
 
   <!-- Question Popup Modal -->
@@ -212,7 +236,7 @@
       }
     ];
 
-    let teamScores = { 1: 0, 2: 0 };
+   let teamScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 
     // Build the Jeopardy Board
     const board = document.getElementById("jeopardy-board");
