@@ -145,7 +145,7 @@
       border: 4px solid #ffcc00;
       border-radius: 12px;
       padding: 30px;
-      max-width: 700px;
+      max-width: 750px;
       width: 90%;
       text-align: center;
       max-height: 90vh;
@@ -180,13 +180,13 @@
     }
     textarea {
       width: 100%;
-      height: 200px;
+      height: 220px;
       font-family: monospace;
       padding: 10px;
       border-radius: 6px;
       border: 2px solid #ffcc00;
       margin: 10px 0;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -226,12 +226,14 @@
       <h2 style="color:#ffcc00; margin-top:0;">Upload Custom Vocabulary Words</h2>
       
       <div class="instructions">
-        <strong>Instructions:</strong> Enter up to 5 words (1 per line). Format each line by filling in the <strong>word, definition, part of speech, synonyms, fill-in-the-blank, other forms</strong> — all on the same line with spaces or commas in between.<br><br>
-        <strong>Example (using commas):</strong><br>
-        <code>exhale, to breathe air out, verb, expire / breathe out, Take a deep breath and then ____., exhalation / exhaled</code>
+        <strong>IMPORTANT FORMAT INSTRUCTIONS:</strong><br>
+        Enter 5 words (1 per line). Use <strong>commas</strong> to separate the 6 fields on each line:<br>
+        <code>Word, Definition, Part of Speech, Synonyms, Fill-in-the-Blank Sentence, Other Forms</code><br><br>
+        <strong>Example:</strong><br>
+        <code>equip, To make sure you have what is necessary to do something well, verb, provide / supply / furnish, You must ____ yourself with the right tools., equipment / equipping</code>
       </div>
 
-      <textarea id="word-list-input" placeholder="exhale, to breathe air out from lungs, verb, expire / breathe out, Take a deep breath and then ____., exhalation / exhaled&#10;promptly, done quickly or without delay, adverb, immediately / quickly, Please reply ____ to the email., promptness / prompt&#10;congestion, overcrowding or heavy traffic, noun, blockage / clogging, Heavy traffic caused road ____., congest / congested&#10;fundamental, essential or core truth, adjective, basic / foundational, Honesty is a ____ principle., fundamentally / fundamentals&#10;stabilize, to make firm or steady, verb, steady / secure, Doctors worked to ____ the patient., stability / stabilizer"></textarea>
+      <textarea id="word-list-input" placeholder="equip, To make sure you have what is necessary to do something well, verb, provide / supply / furnish, You must ____ yourself with the right tools., equipment / equipping&#10;harness, A strap used to fasten or control something, noun, strap / belt, Fasten the ____ securely around your waist., harnessed / harnessing&#10;stabilize, Something that keeps other things steady or balanced, verb, steady / balance, The heavy ballast will ____ the ship., stability / stabilizer&#10;congestion, Heavy traffic or overcrowding in a space, noun, blockage / clogging, Road work caused severe traffic ____., congest / congested&#10;exhale, To breathe air out from your lungs, verb, expire / breathe out, Take a deep breath and then ____., exhalation / exhaled"></textarea>
 
       <div style="margin-top: 15px;">
         <button class="action-btn" id="generate-btn" onclick="generateFromWords()">⚡ Generate Game</button>
@@ -242,7 +244,7 @@
   </div>
 
   <script>
-    // Default Game Data (5 categories)
+    // Default Game Data
     const defaultGameData = [
       {
         category: "Definition",
@@ -250,8 +252,8 @@
           { value: 100, question: "To breathe air out from your lungs.", answer: "Exhale" },
           { value: 200, question: "Done quickly, immediately, or without delay.", answer: "Promptly" },
           { value: 300, question: "Overcrowding, clogging, or a heavy traffic jam.", answer: "Congestion" },
-          { value: 400, question: "A basic, essential truth, rule, or core principle.", answer: "Fundamental" },
-          { value: 500, question: "To make firm, steady, or balanced.", answer: "Stabilize" }
+          { value: 400, question: "To make sure you have what is necessary to do something well.", answer: "Equip" },
+          { value: 500, question: "Keeping other things steady, firm, or balanced.", answer: "Stabilize" }
         ]
       },
       {
@@ -260,18 +262,18 @@
           { value: 100, question: "What part of speech is the word 'EXHALE'?", answer: "Verb" },
           { value: 200, question: "What part of speech is the word 'PROMPTLY'?", answer: "Adverb" },
           { value: 300, question: "What part of speech is the word 'CONGESTION'?", answer: "Noun" },
-          { value: 400, question: "What part of speech is the word 'FUNDAMENTAL'?", answer: "Adjective" },
+          { value: 400, question: "What part of speech is the word 'EQUIP'?", answer: "Verb" },
           { value: 500, question: "What part of speech is the word 'STABILIZE'?", answer: "Verb" }
         ]
       },
       {
         category: "Synonyms",
         clues: [
-          { value: 100, question: "Synonym(s): expire, breathe out", answer: "Exhale" },
-          { value: 200, question: "Synonym(s): immediately, quickly", answer: "Promptly" },
-          { value: 300, question: "Synonym(s): blockage, clogging", answer: "Congestion" },
-          { value: 400, question: "Synonym(s): basic, foundational", answer: "Fundamental" },
-          { value: 500, question: "Synonym(s): steady, secure", answer: "Stabilize" }
+          { value: 100, question: "What are synonym(s) for 'EXHALE'?", answer: "expire, breathe out" },
+          { value: 200, question: "What are synonym(s) for 'PROMPTLY'?", answer: "immediately, quickly" },
+          { value: 300, question: "What are synonym(s) for 'CONGESTION'?", answer: "blockage, clogging" },
+          { value: 400, question: "What are synonym(s) for 'EQUIP'?", answer: "provide, supply, furnish" },
+          { value: 500, question: "What are synonym(s) for 'STABILIZE'?", answer: "steady, balance" }
         ]
       },
       {
@@ -280,8 +282,8 @@
           { value: 100, question: "Fill in the blank:\n\"Take a deep breath and then ____ through your nose.\"", answer: "Exhale" },
           { value: 200, question: "Fill in the blank:\n\"Please reply ____ to the invitation so we can confirm.\"", answer: "Promptly" },
           { value: 300, question: "Fill in the blank:\n\"Heavy morning traffic caused severe road ____.\"", answer: "Congestion" },
-          { value: 400, question: "Fill in the blank:\n\"Honesty is a ____ principle of good character.\"", answer: "Fundamental" },
-          { value: 500, question: "Fill in the blank:\n\"The medical team worked hard to ____ the patient.\"", answer: "Stabilize" }
+          { value: 400, question: "Fill in the blank:\n\"You must ____ yourself with the proper safety gear.\"", answer: "Equip" },
+          { value: 500, question: "Fill in the blank:\n\"The heavy ballast will ____ the ship during the storm.\"", answer: "Stabilize" }
         ]
       },
       {
@@ -290,7 +292,7 @@
           { value: 100, question: "What are other word forms for 'EXHALE'?", answer: "exhalation, exhaled, exhaling" },
           { value: 200, question: "What are other word forms for 'PROMPTLY'?", answer: "prompt, promptness" },
           { value: 300, question: "What are other word forms for 'CONGESTION'?", answer: "congest, congested" },
-          { value: 400, question: "What are other word forms for 'FUNDAMENTAL'?", answer: "fundamentally, fundamentals" },
+          { value: 400, question: "What are other word forms for 'EQUIP'?", answer: "equipment, equipping, equipped" },
           { value: 500, question: "What are other word forms for 'STABILIZE'?", answer: "stability, stabilizer, stabilized" }
         ]
       }
@@ -308,7 +310,6 @@
       return audioCtx;
     }
 
-    // Normal Tick-Tock Sound
     function playTickSound(isTock) {
       try {
         const ctx = getAudioContext();
@@ -325,7 +326,6 @@
       } catch (e) { console.error(e); }
     }
 
-    // Louder Alarming Sound for last 5 seconds
     function playAlarmSound() {
       try {
         const ctx = getAudioContext();
@@ -343,7 +343,6 @@
       } catch (e) { console.error(e); }
     }
 
-    // End Buzzer
     function playBuzzerSound() {
       try {
         const ctx = getAudioContext();
@@ -464,25 +463,27 @@
       document.getElementById("upload-modal").style.display = "none";
     }
 
-    // Parse input line supporting comma-separated or space-separated items
+    // Strictly parse comma-separated fields (or pipe/tab fallback)
     function parseCustomLine(line) {
       let parts = [];
       if (line.includes(',')) {
         parts = line.split(',').map(p => p.trim());
-      } else {
-        parts = line.split(/\s+/).map(p => p.trim());
+      } else if (line.includes('|')) {
+        parts = line.split('|').map(p => p.trim());
+      } else if (line.includes('\t')) {
+        parts = line.split('\t').map(p => p.trim());
       }
 
       if (parts.length < 1 || !parts[0]) return null;
 
-      const word = parts[0] || "N/A";
-      const definition = parts[1] || "No definition provided.";
-      const pos = parts[2] || "Noun";
-      const synonyms = parts[3] || "N/A";
-      const fillIn = parts[4] || `Fill in the blank with the target word: ____.`;
-      const otherForms = parts[5] || "N/A";
-
-      return { word, definition, pos, synonyms, fillIn, otherForms };
+      return {
+        word: parts[0] || "N/A",
+        definition: parts[1] || "No definition provided.",
+        pos: parts[2] || "N/A",
+        synonyms: parts[3] || "N/A",
+        fillIn: parts[4] || "Fill in the blank: ____.",
+        otherForms: parts[5] || "N/A"
+      };
     }
 
     function generateFromWords() {
@@ -496,11 +497,11 @@
       const parsedItems = lines.map(parseCustomLine).filter(item => item !== null);
 
       if (parsedItems.length === 0) {
-        alert("Could not parse any valid lines. Please check the instructions.");
+        alert("Could not parse any valid lines. Please make sure fields are separated by COMMAS.");
         return;
       }
 
-      // Build 5 Categories
+      // Build 5 Jeopardy Categories
       const newGameData = [
         { category: "Definition", clues: [] },
         { category: "Part of Speech", clues: [] },
@@ -512,12 +513,42 @@
       for (let r = 0; r < 5; r++) {
         const item = parsedItems[r % parsedItems.length];
         const val = (r + 1) * 100;
+        const cleanWord = item.word.charAt(0).toUpperCase() + item.word.slice(1);
 
-        newGameData[0].clues.push({ value: val, question: item.definition, answer: item.word });
-        newGameData[1].clues.push({ value: val, question: `What part of speech is the word '${item.word.toUpperCase()}'?`, answer: item.pos });
-        newGameData[2].clues.push({ value: val, question: `Synonym(s): ${item.synonyms}`, answer: item.word });
-        newGameData[3].clues.push({ value: val, question: item.fillIn, answer: item.word });
-        newGameData[4].clues.push({ value: val, question: `What are other word forms for '${item.word.toUpperCase()}'?`, answer: item.otherForms });
+        // 1. Definition -> Question: Definition | Answer: Target Word
+        newGameData[0].clues.push({ 
+          value: val, 
+          question: item.definition, 
+          answer: cleanWord 
+        });
+
+        // 2. Part of Speech -> Question: "What part of speech is 'WORD'?" | Answer: Part of Speech
+        newGameData[1].clues.push({ 
+          value: val, 
+          question: `What part of speech is the word '${item.word.toUpperCase()}'?`, 
+          answer: item.pos 
+        });
+
+        // 3. Synonyms -> Question: "What are synonym(s) for 'WORD'?" | Answer: Synonyms
+        newGameData[2].clues.push({ 
+          value: val, 
+          question: `What are synonym(s) for '${item.word.toUpperCase()}'?`, 
+          answer: item.synonyms 
+        });
+
+        // 4. Fill-in-the-Blank -> Question: Sentence | Answer: Target Word
+        newGameData[3].clues.push({ 
+          value: val, 
+          question: item.fillIn.startsWith("Fill in") ? item.fillIn : `Fill in the blank:\n"${item.fillIn}"`, 
+          answer: cleanWord 
+        });
+
+        // 5. Other Forms -> Question: "What are other word forms for 'WORD'?" | Answer: Other Forms
+        newGameData[4].clues.push({ 
+          value: val, 
+          question: `What are other word forms for '${item.word.toUpperCase()}'?`, 
+          answer: item.otherForms 
+        });
       }
 
       gameData = newGameData;
