@@ -229,7 +229,7 @@
       <div class="instructions">
         <strong>INSTRUCTIONS:</strong><br>
         Copy and paste directly from Excel / Google Sheets (or use commas).<br>
-        Order of columns per row (up to 12 words):<br>
+        Order of columns per row:<br>
         <code>Word | Definition | Part of speech | Synonyms | Fill-in-the-blank | Scrambled Spelling</code>
       </div>
 
@@ -481,7 +481,6 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
 
       if (parsedItems.length === 0) return false;
 
-      // Prepare Categories (5th category renamed to "spelling scramble")
       const categories = [
         { name: "definition", key: "definition" },
         { name: "part of speech", key: "pos" },
@@ -491,7 +490,6 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
       ];
 
       const newGameData = categories.map(cat => {
-        // Randomize word positions for EACH category individually
         const shuffledItems = shuffleArray(parsedItems);
         const clues = [];
 
