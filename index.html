@@ -151,7 +151,7 @@
       max-height: 90vh;
       overflow-y: auto;
     }
-    .clue-text { font-size: 1.8rem; margin-bottom: 20px; line-height: 1.4; white-space: pre-line; }
+    .clue-text { font-size: 1.8rem; margin-bottom: 20px; line-height: 1.4; white-space: pre-line; letter-spacing: 1px; }
     .answer-text { font-size: 1.8rem; color: #ffcc00; margin: 20px 0; display: none; }
     .action-btn {
       background-color: #ffcc00;
@@ -229,8 +229,8 @@
       <div class="instructions">
         <strong>INSTRUCTIONS:</strong><br>
         Copy and paste directly from Excel / Google Sheets (or use commas).<br>
-        Order of columns per row:<br>
-        <code>Word | Definition | Part of speech | Synonyms | Fill-in-the-blank | Other forms</code>
+        Order of columns per row (up to 12 words):<br>
+        <code>Word | Definition | Part of speech | Synonyms | Fill-in-the-blank | Scrambled Spelling</code>
       </div>
 
       <textarea id="word-list-input" placeholder="Paste your Excel spreadsheet rows here..."></textarea>
@@ -244,11 +244,11 @@
   </div>
 
   <script>
-    const defaultRawData = `executive\tA/An executive in a business makes decisions about what should be done.\tnoun\tboss, manager\tA/An ___ in the company meets with the employees to discuss their ideas.\texecute
-equip\tIf you equip yourself for a job or experience, you make sure you have what is necessary to do it well.\tverb\tsupply, provide\tThe building is ____ed with emergency exits.\tequipment
-harness\tA harness is a strap used to fasten or control something.\tnoun\tstrap, belt\tService animals wear a special ____.\tharness (v)
-stabilizing\tSomething that is stabilizing keeps other things steady.\tadjective\tbalancing, steadying\tIf he removes the ____ block, it will fall.\tstabilize (v)
-exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, expire\tIt was so cold we could see our breath when we ____d.\texhalation`;
+    const defaultRawData = `executive\tA/An executive in a business makes decisions about what should be done.\tnoun\tboss, manager\tA/An ___ in the company meets with the employees to discuss their ideas.\tx e e u c t i v e
+equip\tIf you equip yourself for a job or experience, you make sure you have what is necessary to do it well.\tverb\tsupply, provide\tThe building is ____ed with emergency exits.\tq u e p i
+harness\tA harness is a strap used to fasten or control something.\tnoun\tstrap, belt\tService animals wear a special ____.\tr a e h n s s
+stabilizing\tSomething that is stabilizing keeps other things steady.\tadjective\tbalancing, steadying\tIf he removes the ____ block, it will fall.\ts a b i t i l z i n g
+exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, expire\tIt was so cold we could see our breath when we ____d.\tx h a e l e`;
 
     let gameData = [];
     let teamScores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
@@ -434,6 +434,17 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
       return defText.replace(regex, '___');
     }
 
+    // Fallback auto-scramble if column 6 is blank
+    function autoScramble(word) {
+      if (!word) return "";
+      let arr = word.trim().split('');
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr.join(' ').toUpperCase();
+    }
+
     // Fisher-Yates array shuffling
     function shuffleArray(arr) {
       const array = [...arr];
@@ -460,7 +471,7 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
         pos: parts[2] || "",
         synonyms: parts[3] || "",
         fillIn: parts[4] || "",
-        otherForms: parts[5] || ""
+        scrambled: parts[5] || ""
       };
     }
 
@@ -470,13 +481,13 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
 
       if (parsedItems.length === 0) return false;
 
-      // Prepare Categories
+      // Prepare Categories (5th category renamed to "spelling scramble")
       const categories = [
         { name: "definition", key: "definition" },
         { name: "part of speech", key: "pos" },
         { name: "synonyms", key: "synonyms" },
         { name: "fill-in-the-blank", key: "fillIn" },
-        { name: "other forms", key: "otherForms" }
+        { name: "spelling scramble", key: "scrambled" }
       ];
 
       const newGameData = categories.map(cat => {
@@ -503,9 +514,9 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
           } else if (cat.key === "fillIn") {
             questionText = item.fillIn;
             answerText = item.word;
-          } else if (cat.key === "otherForms") {
-            questionText = item.word;
-            answerText = item.otherForms;
+          } else if (cat.key === "scrambled") {
+            questionText = item.scrambled ? item.scrambled : autoScramble(item.word);
+            answerText = item.word;
           }
 
           clues.push({ value: val, question: questionText, answer: answerText });
