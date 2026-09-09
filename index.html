@@ -314,7 +314,14 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
     function initGameData() {
       const savedData = localStorage.getItem("jeopardyCustomData");
       if (savedData) {
-        try { gameData = JSON.parse(savedData); } 
+        try { 
+          gameData = JSON.parse(savedData); 
+          // Force update old category name if cached in browser memory
+          if (gameData[4] && gameData[4].category !== "spelling scramble") {
+            gameData[4].category = "spelling scramble";
+            localStorage.setItem("jeopardyCustomData", JSON.stringify(gameData));
+          }
+        } 
         catch (e) { buildGameFromRawText(defaultRawData); }
       } else {
         buildGameFromRawText(defaultRawData);
@@ -542,7 +549,7 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
       }
 
       renderBoard();
-      closeUploadModal();
+closeUploadModal();
       alert("Successfully loaded and randomized your vocabulary board!");
     }
 
