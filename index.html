@@ -228,8 +228,8 @@
       
       <div class="instructions">
         <strong>INSTRUCTIONS:</strong><br>
-        You can <strong>copy and paste directly from Excel / Google Sheets</strong> (or use commas).<br>
-        Order of columns per row (1 word per line):<br>
+        Copy and paste directly from Excel / Google Sheets (or use commas).<br>
+        Order of columns per row:<br>
         <code>Word | Definition | Part of speech | Synonyms | Fill-in-the-blank | Other forms</code>
       </div>
 
@@ -244,9 +244,8 @@
   </div>
 
   <script>
-    // Sample Default Word List
-    const defaultRawData = `executive\tA/An ___ in a business makes decisions about what should be done.\tnoun\tboss, manager\tA/An ___ in the company meets with the employees to discuss their ideas.\texecute
-equip\tIf you equip yourself for a job, you make sure you have what is necessary.\tverb\tsupply, provide\tThe building is ____ed with emergency exits.\tequipment
+    const defaultRawData = `executive\tA/An executive in a business makes decisions about what should be done.\tnoun\tboss, manager\tA/An ___ in the company meets with the employees to discuss their ideas.\texecute
+equip\tIf you equip yourself for a job or experience, you make sure you have what is necessary to do it well.\tverb\tsupply, provide\tThe building is ____ed with emergency exits.\tequipment
 harness\tA harness is a strap used to fasten or control something.\tnoun\tstrap, belt\tService animals wear a special ____.\tharness (v)
 stabilizing\tSomething that is stabilizing keeps other things steady.\tadjective\tbalancing, steadying\tIf he removes the ____ block, it will fall.\tstabilize (v)
 exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, expire\tIt was so cold we could see our breath when we ____d.\texhalation`;
@@ -417,7 +416,34 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
       document.getElementById("upload-modal").style.display = "none";
     }
 
-    // Split smartly by tab (Excel paste) or by commas
+    // Helper: Replace main word and word roots with blanks in definition
+    function sanitizeDefinition(defText, word) {
+      if (!word || !defText) return defText;
+      let cleanWord = word.trim();
+      let stem = cleanWord;
+      
+      if (cleanWord.endsWith('ing')) stem = cleanWord.slice(0, -3);
+      else if (cleanWord.endsWith('ed')) stem = cleanWord.slice(0, -2);
+      else if (cleanWord.endsWith('es')) stem = cleanWord.slice(0, -2);
+      else if (cleanWord.endsWith('s')) stem = cleanWord.slice(0, -1);
+
+      const escapedWord = cleanWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const escapedStem = stem.length >= 3 ? stem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : escapedWord;
+
+      const regex = new RegExp(`\\b(${escapedStem}|${escapedWord})[a-z]*\\b`, 'gi');
+      return defText.replace(regex, '___');
+    }
+
+    // Fisher-Yates array shuffling
+    function shuffleArray(arr) {
+      const array = [...arr];
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     function parseCustomLine(line) {
       let parts = [];
       if (line.includes('\t')) {
@@ -444,54 +470,49 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
 
       if (parsedItems.length === 0) return false;
 
-      // Create 5 standard Categories
-      const newGameData = [
-        { category: "definition", clues: [] },
-        { category: "part of speech", clues: [] },
-        { category: "synonyms", clues: [] },
-        { category: "fill-in-the-blank", clues: [] },
-        { category: "other forms", clues: [] }
+      // Prepare Categories
+      const categories = [
+        { name: "definition", key: "definition" },
+        { name: "part of speech", key: "pos" },
+        { name: "synonyms", key: "synonyms" },
+        { name: "fill-in-the-blank", key: "fillIn" },
+        { name: "other forms", key: "otherForms" }
       ];
 
-      for (let r = 0; r < 5; r++) {
-        const item = parsedItems[r % parsedItems.length];
-        const val = (r + 1) * 100;
+      const newGameData = categories.map(cat => {
+        // Randomize word positions for EACH category individually
+        const shuffledItems = shuffleArray(parsedItems);
+        const clues = [];
 
-        // 1. Definition -> Clue: Definition | Answer: Word
-        newGameData[0].clues.push({
-          value: val,
-          question: item.definition,
-          answer: item.word
-        });
+        for (let r = 0; r < 5; r++) {
+          const item = shuffledItems[r % shuffledItems.length];
+          const val = (r + 1) * 100;
 
-        // 2. Part of Speech -> Clue: Word | Answer: Part of speech
-        newGameData[1].clues.push({
-          value: val,
-          question: item.word,
-          answer: item.pos
-        });
+          let questionText = "";
+          let answerText = "";
 
-        // 3. Synonyms -> Clue: Word | Answer: Synonyms
-        newGameData[2].clues.push({
-          value: val,
-          question: item.word,
-          answer: item.synonyms
-        });
+          if (cat.key === "definition") {
+            questionText = sanitizeDefinition(item.definition, item.word);
+            answerText = item.word;
+          } else if (cat.key === "pos") {
+            questionText = item.word;
+            answerText = item.pos;
+          } else if (cat.key === "synonyms") {
+            questionText = item.word;
+            answerText = item.synonyms;
+          } else if (cat.key === "fillIn") {
+            questionText = item.fillIn;
+            answerText = item.word;
+          } else if (cat.key === "otherForms") {
+            questionText = item.word;
+            answerText = item.otherForms;
+          }
 
-        // 4. Fill-in-the-blank -> Clue: Sentence | Answer: Word
-        newGameData[3].clues.push({
-          value: val,
-          question: item.fillIn,
-          answer: item.word
-        });
+          clues.push({ value: val, question: questionText, answer: answerText });
+        }
 
-        // 5. Other Forms -> Clue: Word | Answer: Other forms
-        newGameData[4].clues.push({
-          value: val,
-          question: item.word,
-          answer: item.otherForms
-        });
-      }
+        return { category: cat.name, clues: clues };
+      });
 
       gameData = newGameData;
       localStorage.setItem("jeopardyCustomData", JSON.stringify(gameData));
@@ -513,7 +534,7 @@ exhale\tIf you exhale, you breathe air out from your lungs.\tverb\tbreathe out, 
 
       renderBoard();
       closeUploadModal();
-      alert("Successfully loaded your vocabulary board!");
+      alert("Successfully loaded and randomized your vocabulary board!");
     }
 
     function resetToDefault() {
